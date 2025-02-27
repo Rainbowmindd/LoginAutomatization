@@ -12,6 +12,10 @@ import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 
+import java.time.Duration;
+import java.time.Instant;
+
+
 public class LoginPageTest {
     LoginPage loginPage = new LoginPage();
 
@@ -57,6 +61,26 @@ public class LoginPageTest {
     }
 
     //glitch user test:
+    @Test
+    public void glitchUserLoginTest() {
+        loginPage.username.sendKeys("performance_glitch_user");
+        loginPage.password.sendKeys("secret_sauce");
 
+        Instant startTime = Instant.now();
+
+        loginPage.loginButton.click();
+
+        $("div.inventory_container").shouldBe(visible,Duration.ofSeconds(4));
+
+        Instant endTime= Instant.now();
+        long loadTime = Duration.between(startTime,endTime).toMillis();
+
+        if(loadTime>4000){
+            System.out.println("Glitch detected");
+        } else{
+            System.out.println("Glitch not detected");
+        }
+
+    }
 
 }
